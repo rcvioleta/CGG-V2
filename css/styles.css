@@ -12,7 +12,7 @@ body {
   box-sizing: border-box;
 }
 
-header>#title {
+header > #title {
   padding: 2rem 0;
   text-align: center;
 }
@@ -34,7 +34,7 @@ header>#title {
   border: var(--border-dark-2px);
 }
 
-.flex>.box {
+.flex > .box {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +55,7 @@ header>#title {
   border-bottom: var(--border-dark-2px);
 }
 
-#controls.flex>div {
+#controls.flex > div {
   flex: 0 1 50%;
   text-align: center;
 }
@@ -65,21 +65,22 @@ header>#title {
   justify-content: center;
 }
 
-#controls .modes>ul {
+#controls .modes > ul {
   padding: 0;
   margin: 0;
   text-align: left;
   display: inline-flex;
 }
 
-#controls .modes>ul>li {
+#controls .modes > ul > li {
   list-style: none;
+  padding: 0.1rem 1rem;
 }
 
-#controls .modes>ul>li:not(:last-child) {
-  margin-right: 1rem;
+#controls .modes > ul > li.active {
+  background-color: #f0974e;
 }
 
-.modes>ul>li {
+.modes > ul > li {
   cursor: var(--pointer-cursor);
 }
