@@ -1,0 +1,85 @@
+:root {
+  --border-dark-2px: 2px solid #000;
+
+  --pointer-cursor: pointer;
+}
+
+*,
+html,
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header>#title {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.box-wrapper {
+  width: 800px;
+  margin: 2rem auto;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box-wrapper.flex {
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: var(--border-dark-2px);
+}
+
+.flex>.box {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #fff;
+  font-size: clamp(2rem, 5vw, 3rem);
+  cursor: var(--pointer-cursor);
+  height: 220px;
+  flex: 0 1 31%;
+  margin: 1%;
+}
+
+#controls {
+  color: #fff;
+  background-color: blue;
+  /* padding: 0.2rem 0; */
+  border-top: var(--border-dark-2px);
+  border-bottom: var(--border-dark-2px);
+}
+
+#controls.flex>div {
+  flex: 0 1 50%;
+  text-align: center;
+}
+
+#controls .modes {
+  align-content: center;
+  justify-content: center;
+}
+
+#controls .modes>ul {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  display: inline-flex;
+}
+
+#controls .modes>ul>li {
+  list-style: none;
+}
+
+#controls .modes>ul>li:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.modes>ul>li {
+  cursor: var(--pointer-cursor);
+}
