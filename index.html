@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Color Guessing Game</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
 
-  <body>
-    <main>
-      <header>
-        <div id="title">
-          <h1>Color Guessing Game</h1>
-          <h1>Guess the color: RGB(<span id="display-color"></span>)</h1>
-        </div>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Guessing Game</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-      <div id="controls" class="flex">
-        <div class="menu">Reset / Try Again</div>
-        <div class="message">You have 4 attempts left!</div>
-        <div class="modes">
-          <ul>
-            <li class="active">Easy</li>
-            <li>Medium</li>
-            <li>Hard</li>
-          </ul>
-        </div>
+<body>
+  <main>
+    <header>
+      <div id="title">
+        <h1>Color Guessing Game</h1>
+        <h1>Guess the color: RGB(<span id="display-color"></span>)</h1>
       </div>
+    </header>
 
-      <div id="user-sellected-mode"></div>
+    <div id="controls" class="flex">
+      <div class="menu">
+        <a href="#reset" onclick="init();">Reset</a>
+        <a href="">Try Again</a>
+      </div>
+      <div class="message">You have 4 attempts left!</div>
+      <div class="modes">
+        <ul>
+          <li class="active">Easy</li>
+          <li>Medium</li>
+          <li>Hard</li>
+        </ul>
+      </div>
+    </div>
 
-      <div class="box-wrapper flex"></div>
-    </main>
+    <div id="user-sellected-mode"></div>
 
-    <script src="js/app.js"></script>
-  </body>
+    <div class="box-wrapper flex"></div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+
 </html>

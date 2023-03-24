@@ -1,7 +1,7 @@
 const pipe =
   (...fns) =>
-  (val) =>
-    fns.reduce((nv, fn) => fn(nv), val);
+    (val) =>
+      fns.reduce((nv, fn) => fn(nv), val);
 
 const randColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -10,25 +10,24 @@ const randColor = () => {
   return `${r}, ${g}, ${b}`;
 };
 
-const randColors = function (num) {
-  return new Array(num).fill("").map(() => randColor());
-};
+const randColors = num => new Array(num).fill("").map(() => randColor());
 
 const randPickColor = (colorArr) =>
   colorArr[Math.floor(Math.random() * colorArr.length)];
 
-const gameModeObj = {
+const gameModes = {
   easy: 4,
   medium: 6,
   hard: 8,
 };
-const DEFAULT_GAME_MODE = gameModeObj.easy;
-let gameMode = DEFAULT_GAME_MODE;
+let gameMode = gameModes.easy;
 
-let colorsArray = randColors(gameMode);
-let selectedColor = randPickColor(colorsArray);
+const calcAttempts = () => Math.ceil(gameMode / 2);
 
-const delChildBoxes = () => {
+let attempts = calcAttempts();
+let colorsArray, selectedColor = undefined;
+
+const deleteBoxes = () => {
   const boxes = document.querySelectorAll(".box-wrapper > .box");
   boxes.forEach((box) => box.parentNode.removeChild(box));
 };
@@ -43,15 +42,18 @@ const setGameModes = () => {
         menuItem.classList.remove("active");
       }
       el.classList.add("active");
-      const userSelectedMode = el.textContent.trim().toLowerCase();
+      const selectedMode = el.textContent.trim().toLowerCase();
+      const gameModeKeys = Object.keys(gameModes);
 
-      if (!Object.keys(gameModeObj).includes(userSelectedMode)) {
-        return;
+      if (!gameModeKeys.includes(selectedMode)) {
+        window.location.reload();
       }
-      gameMode = gameModeObj[userSelectedMode];
-      colorsArray = randColors(gameMode);
-      selectedColor = randPickColor(colorsArray);
-      delChildBoxes();
+
+      if (gameModes[selectedMode] === gameMode) {
+        return
+      }
+
+      gameMode = gameModes[selectedMode];
       init();
     });
   }
@@ -62,6 +64,7 @@ const boxClickHandler = (evt) => {
   const userSelectedColor =
     el.style.backgroundColor.match(/(\d+)([\d\s\,]+)/gim)[0];
   const boxes = document.querySelectorAll(".box-wrapper > .box");
+  const messageEl = document.querySelector("#controls > .message");
 
   if (userSelectedColor === selectedColor) {
     document
@@ -72,15 +75,30 @@ const boxClickHandler = (evt) => {
       box.textContent = "";
     });
     document.getElementById("controls").style.backgroundColor = "green";
-    document.querySelector("#controls > .message").textContent =
-      "Congrats, you win!";
-    return cleanupEventListeners();
+    messageEl.textContent = "Congrats, you win!";
+    cleanupEventListeners();
+    return
   }
+
+  attempts--;
   el.textContent = "X";
-  el.setAttribute("style", "background-color: red;");
+  el.classList.add('incorrect');
+  el.setAttribute("style", `${el.getAttribute("style")}; border: 5px solid red;`);
+  messageEl.textContent = `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
+
+  if (attempts === 0) {
+    boxes.forEach((box) => {
+      if (!box.classList.contains('incorrect')) {
+        box.classList.add('incorrect')
+      }
+      box.textContent = "X"
+      box.setAttribute("style", 'color: #000; background-color: red; border: 5px solid #000;');
+      messageEl.textContent = 'You lose!';
+    });
+  }
 };
 
-const buildBoxes = () => {
+const createBoxes = () => {
   const boxWrapper = document.querySelector(".box-wrapper");
   for (let i = 0; i < gameMode; i++) {
     const div = document.createElement("div");
@@ -92,15 +110,28 @@ const buildBoxes = () => {
 };
 
 const cleanupEventListeners = () => {
-  // remove event listeners here
   const boxes = document.querySelectorAll(".box-wrapper > .box");
   boxes.forEach((box) => box.removeEventListener("click", boxClickHandler));
 };
 
-const init = () => {
-  // display the boxes according to the game mode
+const reset = () => {
+  cleanupEventListeners();
+  deleteBoxes();
+  attempts = calcAttempts();
+  colorsArray = randColors(gameMode);
+  selectedColor = randPickColor(colorsArray);
   document.getElementById("display-color").textContent = selectedColor;
-  buildBoxes();
+  document
+    .querySelector("header")
+    .removeAttribute("style");
+  document.getElementById("controls").style.backgroundColor = "#0000ff";
+  document.querySelector("#controls > .message").textContent =
+    `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
+}
+
+const init = () => {
+  reset();
+  createBoxes();
   setGameModes();
 };
 
