@@ -105,6 +105,13 @@ header>#title {
   border-bottom: var(--border-dark-2px);
 }
 
+#controls a {
+  color: #fff;
+  margin: 0;
+  /* text-decoration: none; */
+  /* padding: 0.1rem 1rem; */
+}
+
 #controls.flex>div {
   flex: 0 1 50%;
   text-align: center;

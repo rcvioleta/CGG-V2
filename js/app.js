@@ -59,6 +59,17 @@ const setGameModes = () => {
   }
 };
 
+const createResetLink = (text) => {
+  const a = document.createElement('a');
+  a.textContent = text;
+  a.href = '';
+  a.onclick = evt => {
+    evt.preventDefault();
+    init();
+  }
+  return a;
+}
+
 const boxClickHandler = (evt) => {
   const el = evt.target;
   const userSelectedColor =
@@ -75,7 +86,8 @@ const boxClickHandler = (evt) => {
       box.textContent = "";
     });
     document.getElementById("controls").style.backgroundColor = "#008000";
-    messageEl.textContent = "Congrats, you win!";
+    messageEl.textContent = "Congrats, you win! ";
+    messageEl.appendChild(createResetLink('New game'))
     cleanupEventListeners();
     return
   }
@@ -86,7 +98,8 @@ const boxClickHandler = (evt) => {
   el.setAttribute("style", `${el.getAttribute("style")}; border: 5px solid #ff0000;`);
   messageEl.textContent = `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
 
-  if (attempts === 0) {
+  if (attempts <= 0) {
+    console.log('attempts <= 0 true')
     boxes.forEach((box) => {
       if (!box.classList.contains('incorrect')) {
         box.classList.add('incorrect')
@@ -94,7 +107,9 @@ const boxClickHandler = (evt) => {
       box.textContent = "X"
       box.setAttribute("style", 'color: #000; background-color: #ff0000; border: 5px solid #000;');
       document.getElementById("controls").style.backgroundColor = "#ff0000";
-      messageEl.textContent = 'You lose!';
+      messageEl.textContent = 'You lose! ';
+      messageEl.appendChild(createResetLink('Try again'));
+      cleanupEventListeners();
     });
   }
 };
