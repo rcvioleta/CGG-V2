@@ -74,7 +74,7 @@ const boxClickHandler = (evt) => {
       box.setAttribute("style", `background-color: rgb(${selectedColor});`);
       box.textContent = "";
     });
-    document.getElementById("controls").style.backgroundColor = "green";
+    document.getElementById("controls").style.backgroundColor = "#008000";
     messageEl.textContent = "Congrats, you win!";
     cleanupEventListeners();
     return
@@ -83,7 +83,7 @@ const boxClickHandler = (evt) => {
   attempts--;
   el.textContent = "X";
   el.classList.add('incorrect');
-  el.setAttribute("style", `${el.getAttribute("style")}; border: 5px solid red;`);
+  el.setAttribute("style", `${el.getAttribute("style")}; border: 5px solid #ff0000;`);
   messageEl.textContent = `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
 
   if (attempts === 0) {
@@ -92,14 +92,15 @@ const boxClickHandler = (evt) => {
         box.classList.add('incorrect')
       }
       box.textContent = "X"
-      box.setAttribute("style", 'color: #000; background-color: red; border: 5px solid #000;');
+      box.setAttribute("style", 'color: #000; background-color: #ff0000; border: 5px solid #000;');
+      document.getElementById("controls").style.backgroundColor = "#ff0000";
       messageEl.textContent = 'You lose!';
     });
   }
 };
 
 const createBoxes = () => {
-  const boxWrapper = document.querySelector(".box-wrapper");
+  const boxWrapper = document.querySelector(".box-wrapper"); ``
   for (let i = 0; i < gameMode; i++) {
     const div = document.createElement("div");
     div.classList.add("box");
