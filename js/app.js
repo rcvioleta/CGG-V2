@@ -107,9 +107,9 @@
     }
   };
 
-  const createBoxes = () => {
+  const createBoxes = (numBoxes) => {
     const boxWrapper = document.querySelector(".box-wrapper");
-    for (let i = 0; i < gameMode; i++) {
+    for (let i = 0; i < numBoxes; i++) {
       const div = document.createElement("div");
       div.classList.add("box");
       div.setAttribute("style", `background-color: rgb(${colorsArray[i]});`);
@@ -142,7 +142,7 @@
 
   const init = () => {
     reset();
-    createBoxes();
+    createBoxes(gameMode);
     setGameModes();
   };
 
