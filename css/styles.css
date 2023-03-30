@@ -31,7 +31,7 @@ header>#title {
 .box-wrapper.flex {
   flex-direction: row;
   flex-wrap: wrap;
-  border: var(--border-dark-2px);
+  /* border: var(--border-dark-2px); */
 }
 
 .flex>.box {
@@ -103,6 +103,13 @@ header>#title {
   background-color: #0000ff;
   border-top: var(--border-dark-2px);
   border-bottom: var(--border-dark-2px);
+}
+
+#controls a {
+  color: #fff;
+  margin: 0;
+  /* text-decoration: none; */
+  /* padding: 0.1rem 1rem; */
 }
 
 #controls.flex>div {

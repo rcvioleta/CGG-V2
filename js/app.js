@@ -1,8 +1,3 @@
-const pipe =
-  (...fns) =>
-    (val) =>
-      fns.reduce((nv, fn) => fn(nv), val);
-
 const randColor = () => {
   const r = Math.floor(Math.random() * 256);
   const g = Math.floor(Math.random() * 256);
@@ -15,58 +10,67 @@ const randColors = num => new Array(num).fill("").map(() => randColor());
 const randPickColor = (colorArr) =>
   colorArr[Math.floor(Math.random() * colorArr.length)];
 
-const gameModes = {
+const modes = {
   easy: 4,
   medium: 6,
   hard: 8,
 };
-let gameMode = gameModes.easy;
-
-const calcAttempts = () => Math.ceil(gameMode / 2);
-
+let gameMode = modes.easy;
 let attempts = calcAttempts();
 let colorsArray, selectedColor = undefined;
 
+const modesEl = document.querySelectorAll(".modes > ul > li");
+const controlsEl = document.getElementById("controls");
+const messageEl = document.querySelector("#controls > .message");
+
 const deleteBoxes = () => {
-  const boxes = document.querySelectorAll(".box-wrapper > .box");
-  boxes.forEach((box) => box.parentNode.removeChild(box));
+  document.querySelectorAll(".box-wrapper > .box").forEach((box) => {
+    box.parentNode.removeChild(box)
+  });
 };
 
-const setGameModes = () => {
-  const gameModesEl = document.querySelectorAll(".modes > ul > li");
+function calcAttempts() {
+  return Math.ceil(gameMode / 2);
+}
 
-  for (let i = 0; i < gameModesEl.length; i++) {
-    gameModesEl[i].addEventListener("click", function (evt) {
+const setGameModes = () => {
+  for (let i = 0; i < modesEl.length; i++) {
+    modesEl[i].addEventListener("click", (evt) => {
       const el = evt.target;
-      for (let menuItem of el.parentNode.children) {
-        menuItem.classList.remove("active");
+      for (let menu of el.parentNode.children) {
+        menu.classList.remove("active");
       }
       el.classList.add("active");
-      const selectedMode = el.textContent.trim().toLowerCase();
-      const gameModeKeys = Object.keys(gameModes);
+      const selMode = el.textContent.trim().toLowerCase();
+      const keys = Object.keys(modes);
 
-      if (!gameModeKeys.includes(selectedMode)) {
-        window.location.reload();
-      }
+      if (!keys.includes(selMode)) window.location.reload();
+      if (modes[selMode] === gameMode) return
 
-      if (gameModes[selectedMode] === gameMode) {
-        return
-      }
-
-      gameMode = gameModes[selectedMode];
+      gameMode = modes[selMode];
       init();
     });
   }
 };
 
+const createElWithText = (text) => {
+  const anchorTag = document.createElement('a');
+  anchorTag.textContent = text;
+  anchorTag.href = '';
+  anchorTag.onclick = e => {
+    e.preventDefault();
+    init();
+  }
+  return anchorTag;
+}
+
 const boxClickHandler = (evt) => {
   const el = evt.target;
-  const userSelectedColor =
+  const boxClicked =
     el.style.backgroundColor.match(/(\d+)([\d\s\,]+)/gim)[0];
   const boxes = document.querySelectorAll(".box-wrapper > .box");
-  const messageEl = document.querySelector("#controls > .message");
 
-  if (userSelectedColor === selectedColor) {
+  if (boxClicked === selectedColor) {
     document
       .querySelector("header")
       .setAttribute("style", `background-color: rgb(${selectedColor});`);
@@ -74,8 +78,9 @@ const boxClickHandler = (evt) => {
       box.setAttribute("style", `background-color: rgb(${selectedColor});`);
       box.textContent = "";
     });
-    document.getElementById("controls").style.backgroundColor = "#008000";
-    messageEl.textContent = "Congrats, you win!";
+    controlsEl.style.backgroundColor = "#008000";
+    messageEl.textContent = "Congrats, you win! ";
+    messageEl.appendChild(createElWithText('New game'))
     cleanupEventListeners();
     return
   }
@@ -86,21 +91,23 @@ const boxClickHandler = (evt) => {
   el.setAttribute("style", `${el.getAttribute("style")}; border: 5px solid #ff0000;`);
   messageEl.textContent = `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
 
-  if (attempts === 0) {
+  if (attempts <= 0) {
     boxes.forEach((box) => {
       if (!box.classList.contains('incorrect')) {
         box.classList.add('incorrect')
       }
       box.textContent = "X"
       box.setAttribute("style", 'color: #000; background-color: #ff0000; border: 5px solid #000;');
-      document.getElementById("controls").style.backgroundColor = "#ff0000";
-      messageEl.textContent = 'You lose!';
+      controlsEl.style.backgroundColor = "#ff0000";
+      messageEl.textContent = 'You lose! ';
+      messageEl.appendChild(createElWithText('Try again'));
+      cleanupEventListeners();
     });
   }
 };
 
 const createBoxes = () => {
-  const boxWrapper = document.querySelector(".box-wrapper"); ``
+  const boxWrapper = document.querySelector(".box-wrapper");
   for (let i = 0; i < gameMode; i++) {
     const div = document.createElement("div");
     div.classList.add("box");
@@ -111,8 +118,10 @@ const createBoxes = () => {
 };
 
 const cleanupEventListeners = () => {
-  const boxes = document.querySelectorAll(".box-wrapper > .box");
-  boxes.forEach((box) => box.removeEventListener("click", boxClickHandler));
+  // remove event listeners for boxes
+  document.querySelectorAll(".box-wrapper > .box").forEach((box) => {
+    box.removeEventListener("click", boxClickHandler)
+  });
 };
 
 const reset = () => {
@@ -125,8 +134,8 @@ const reset = () => {
   document
     .querySelector("header")
     .removeAttribute("style");
-  document.getElementById("controls").style.backgroundColor = "#0000ff";
-  document.querySelector("#controls > .message").textContent =
+  controlsEl.style.backgroundColor = "#0000ff";
+  messageEl.textContent =
     `You have ${attempts} ${attempts >= 2 ? 'clicks' : 'click'} remaining.`;
 }
 
@@ -138,4 +147,4 @@ const init = () => {
 
 init();
 
-window.onbeforeunload = cleanupEventListeners;
+window.onbeforeunload = cleanupEventListeners
