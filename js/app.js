@@ -23,6 +23,7 @@
   const modesEl = document.querySelectorAll(".modes > ul > li");
   const controlsEl = document.getElementById("controls");
   const messageEl = document.querySelector("#controls > .message");
+  const resetEl = document.getElementById('reset');
 
   const deleteBoxes = () => {
     document.querySelectorAll(".box-wrapper > .box").forEach((box) => {
@@ -82,7 +83,7 @@
       controlsEl.style.backgroundColor = "#008000";
       messageEl.textContent = "Congrats, you win! ";
       messageEl.appendChild(createElWithText('New game'))
-      cleanupEventListeners();
+      disposeEventListeners();
       return
     }
 
@@ -102,7 +103,7 @@
         controlsEl.style.backgroundColor = "#ff0000";
         messageEl.textContent = 'You lose! ';
         messageEl.appendChild(createElWithText('Try again'));
-        cleanupEventListeners();
+        disposeEventListeners();
       });
     }
   };
@@ -118,7 +119,7 @@
     }
   };
 
-  const cleanupEventListeners = () => {
+  const disposeEventListeners = () => {
     // remove event listeners for boxes
     document.querySelectorAll(".box-wrapper > .box").forEach((box) => {
       box.removeEventListener("click", boxClickHandler)
@@ -126,7 +127,7 @@
   };
 
   const reset = () => {
-    cleanupEventListeners();
+    disposeEventListeners();
     deleteBoxes();
     attempts = calcAttempts();
     colorsArray = randColors(gameMode);
@@ -148,5 +149,10 @@
 
   init();
 
-  window.onbeforeunload = cleanupEventListeners
+  resetEl.addEventListener('click', evt => {
+    evt.preventDefault();
+    init();
+  });
+
+  window.onbeforeunload = disposeEventListeners
 })()
